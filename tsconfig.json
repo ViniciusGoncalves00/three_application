@@ -1,0 +1,22 @@
+// {
+//   "compilerOptions":
+//   {
+//     "outDir": "./dist",
+//     "rootDir": ".three_project/src/*.ts",
+//     "noImplicitAny": true,
+//     "module": "es6",
+//     "target": "es5",
+//     "allowJs": false,
+//     "moduleResolution": "node",
+//     "sourceMap": true,
+//     "downlevelIteration": true,
+//     "strict": true,
+//     "esModuleInterop": true,
+//     "forceConsistentCasingInFileNames": true,
+//     "skipLibCheck": true,
+//     "typeRoots": ["./node_modules/@types"],
+//     "types": ["three"]
+//   },
+//   "include": ["./three_project/src/*.ts", "./alpinejs.d.ts"],
+//   "exclude":["node_modules", "dist", "*.config.js"]
+// }
