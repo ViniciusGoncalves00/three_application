@@ -49,9 +49,15 @@ document.addEventListener("alpine:init", () => {
                 if (keysPressed["ArrowRight"]) {
                     direction.add(Vector.Right);
                 }
+                if (keysPressed["ArrowUp"]) {
+                    direction.add(Vector.Up);
+                }
+                if (keysPressed["ArrowDown"]) {
+                    direction.add(Vector.Down);
+                }
                 
                 direction.normalize();
-                handler.Move(selectedMesh, direction, speed);
+                handler.Move(selectedMesh, direction, speed / 10);
             }
 
             const loop = () => {
