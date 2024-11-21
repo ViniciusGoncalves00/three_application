@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports =
 {
-    entry: './three_project/src/index.js',
+    entry: './three_project/src/index.ts',
     output:
     {
         filename: 'bundle.js',
@@ -24,15 +24,15 @@ module.exports =
     },
     resolve:
     {
-        extensions: ['.ts', '.js'], // Resolve .ts and .js files
+        extensions: [".tsx", ".ts", ".js"],
     },
     module:
     {
         rules:
         [
             {
-                test: /\.ts$/, // Match TypeScript files
-                use: 'ts-loader',
+                test: /\.tsx?$/,
+                use: "ts-loader",
                 exclude: /node_modules/,
             },
             {
