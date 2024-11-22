@@ -9,7 +9,7 @@ def index(request):
 def home(request):
     return render(request, 'index.html')
 
-class ShowHTML(View):
-    template = loader.get_template(r"C:\Users\Computador\Documents\GitHub\three_application\three_project\app\templates\index.html")
-    def get(self, request):
-        return render(request, self.template)
+# class ShowHTML(View):
+#     template = loader.get_template(r"C:\Users\Computador\Documents\GitHub\three_application\three_project\app\templates\index.html")
+#     def get(self, request):
+#         return render(request, self.template)

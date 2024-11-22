@@ -2,8 +2,8 @@ import './styles.css';
 import Alpine from 'alpinejs';
 import * as THREE from 'three';
 import { SceneManager } from './SceneManager';
+import { InputManager } from './InputManager';
 import { Vector } from './InputManager';
-import * as InputManager from './InputManager';
 import { HandleMesh } from './HandleMesh';
 
 declare global {
@@ -14,7 +14,6 @@ declare global {
 
 window.Alpine = Alpine;
 
-const keysPressed: Record<string, boolean> = {};
 let selectedMesh: THREE.Mesh;
 let speed: number = 1;
 
@@ -22,42 +21,35 @@ document.addEventListener("alpine:init", () => {
     Alpine.store("input", {
         setup_input() {
             const sceneManager = SceneManager.GetInstance();
-            let handler = new HandleMesh();
-
-            document.addEventListener("keydown", (event: KeyboardEvent) => {
-                keysPressed[event.key] = true;
-            });
-
-            document.addEventListener("keyup", (event: KeyboardEvent) => {
-                keysPressed[event.key] = false;
-            });
+            const inputManager = InputManager.GetInstance();
+            const handler = new HandleMesh();
 
             const update = () => {
-                
                 let direction = new THREE.Vector3(0, 0, 0);
                 
-                if (keysPressed["I"] || keysPressed["i"]){
+                if (inputManager.GetKeyDown(inputManager.Instantiate))
+                {
                     selectedMesh = handler.GenerateMesh();
                 }
-                if (selectedMesh == null) {
-                    return;
-                }
 
-                if (keysPressed["ArrowLeft"]) {
-                    direction.add(Vector.Left);
+                if (selectedMesh != null)
+                {
+                    if (inputManager.GetKey(inputManager.Left)) {
+                        direction.add(Vector.Left);
+                    }
+                    if (inputManager.GetKey(inputManager.Right)) {
+                        direction.add(Vector.Right);
+                    }
+                    if (inputManager.GetKey(inputManager.Up)) {
+                        direction.add(Vector.Up);
+                    }
+                    if (inputManager.GetKey(inputManager.Down)) {
+                        direction.add(Vector.Down);
+                    }
+                    
+                    direction.normalize();
+                    handler.Move(selectedMesh, direction, speed / 10);
                 }
-                if (keysPressed["ArrowRight"]) {
-                    direction.add(Vector.Right);
-                }
-                if (keysPressed["ArrowUp"]) {
-                    direction.add(Vector.Up);
-                }
-                if (keysPressed["ArrowDown"]) {
-                    direction.add(Vector.Down);
-                }
-                
-                direction.normalize();
-                handler.Move(selectedMesh, direction, speed / 10);
             }
 
             const loop = () => {
