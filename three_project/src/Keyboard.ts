@@ -1,7 +1,5 @@
-import * as THREE from 'three';
-
-export class InputManager {
-    private static _instance: InputManager;
+export class Keyboard {
+    private static _instance: Keyboard;
     private keysHeld: Record<string, boolean> = {};
     private keysDown: Record<string, boolean> = {};
     private keysUp: Record<string, boolean> = {};
@@ -26,9 +24,9 @@ export class InputManager {
         });
     }
 
-    public static GetInstance(): InputManager {
+    public static GetInstance(): Keyboard {
         if (!this._instance) {
-            this._instance = new InputManager();
+            this._instance = new Keyboard();
         }
         return this._instance;
     }
@@ -48,11 +46,4 @@ export class InputManager {
         this.keysUp[key] = false;
         return isUp;
     }
-}
-
-export class Vector {
-    static Right = new THREE.Vector3(1, 0, 0);
-    static Left = new THREE.Vector3(-1, 0, 0);
-    static Up = new THREE.Vector3(0, 1, 0);
-    static Down = new THREE.Vector3(0, -1, 0);
 }

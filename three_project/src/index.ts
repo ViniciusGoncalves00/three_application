@@ -2,8 +2,9 @@ import './styles.css';
 import Alpine from 'alpinejs';
 import * as THREE from 'three';
 import { SceneManager } from './SceneManager';
-import { InputManager } from './InputManager';
-import { Vector } from './InputManager';
+import { Keyboard } from './Keyboard';
+import { Mouse } from './Mouse';
+import { Vector } from './Utils';
 import { HandleMesh } from './HandleMesh';
 
 declare global {
@@ -14,41 +15,58 @@ declare global {
 
 window.Alpine = Alpine;
 
-let selectedMesh: THREE.Mesh;
+let selectedMesh: THREE.Mesh | null;
 let speed: number = 1;
 
 document.addEventListener("alpine:init", () => {
     Alpine.store("input", {
         setup_input() {
             const sceneManager = SceneManager.GetInstance();
-            const inputManager = InputManager.GetInstance();
-            const handler = new HandleMesh();
+            const mouse = Mouse.GetInstance();
+            const keyboard = Keyboard.GetInstance();
+            const meshHandler = new HandleMesh();
+            const raycaster = new THREE.Raycaster();
 
             const update = () => {
                 let direction = new THREE.Vector3(0, 0, 0);
                 
-                if (inputManager.GetKeyDown(inputManager.Instantiate))
+                if (keyboard.GetKeyDown(keyboard.Instantiate))
                 {
-                    selectedMesh = handler.GenerateMesh();
+                    meshHandler.GenerateMesh();
+                }
+
+                if(mouse.GetButtonDown(mouse.leftButton))
+                {
+                    raycaster.setFromCamera(mouse.NormalizedPosition(), sceneManager.Camera);
+
+                    const intersects = raycaster.intersectObjects(sceneManager.Scene.children, true);
+                
+                    if (intersects.length > 0) {
+                        selectedMesh = intersects[0].object as THREE.Mesh;
+                    }
+                    else
+                    {
+                        selectedMesh = null;
+                    }
                 }
 
                 if (selectedMesh != null)
                 {
-                    if (inputManager.GetKey(inputManager.Left)) {
+                    if (keyboard.GetKey(keyboard.Left)) {
                         direction.add(Vector.Left);
                     }
-                    if (inputManager.GetKey(inputManager.Right)) {
+                    if (keyboard.GetKey(keyboard.Right)) {
                         direction.add(Vector.Right);
                     }
-                    if (inputManager.GetKey(inputManager.Up)) {
+                    if (keyboard.GetKey(keyboard.Up)) {
                         direction.add(Vector.Up);
                     }
-                    if (inputManager.GetKey(inputManager.Down)) {
+                    if (keyboard.GetKey(keyboard.Down)) {
                         direction.add(Vector.Down);
                     }
                     
                     direction.normalize();
-                    handler.Move(selectedMesh, direction, speed / 10);
+                    meshHandler.Move(selectedMesh, direction, speed / 10);
                 }
             }
 

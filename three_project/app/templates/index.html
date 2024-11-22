@@ -16,12 +16,12 @@
             </div>
         </div>
     </div> {% endcomment %}
-    <div>
+    {% comment %} <div>
         <div class="bg-white">BUTTON</div>
-        {% comment %} <div id="info" class="bg-transparent">
+        <div id="info" class="bg-transparent">
             <button @click="$store.callbacks.move_cube('left')">MOVE LEFT</button>
             <button @click="$store.callbacks.move_cube('right')">MOVE RIGHT</button>
-        </div> {% endcomment %}
-    </div>
+        </div>
+    </div> {% endcomment %}
 
 {% endblock  %}

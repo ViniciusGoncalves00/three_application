@@ -1,33 +1,37 @@
 import * as THREE from 'three';
-import { SceneManager } from './SceneManager';
 
 export class Mouse
 {
     private static _instance : Mouse;
-    private _raycaster = new THREE.Raycaster();
-    private _sceneManager : SceneManager;
 
     public position = new THREE.Vector2();
 
+    private buttonsHeld: Record<number, boolean> = {};
+    private buttonsDown: Record<number, boolean> = {};
+    private buttonsUp: Record<number, boolean> = {};
+
+    public leftButton : number = 0;
+    public rightButton : number = 1;
+    public middleButton : number = 2;
+
     private constructor()
     {
-        this._sceneManager = SceneManager.GetInstance();
-
-        document.addEventListener("pointermove", (event) => {
-            const x = event.clientX;
-            const y = event.clientY;
-            this.position.set(x, y);
+        document.addEventListener("mousedown", (event: MouseEvent) => {
+            if (!this.buttonsHeld[event.button]) {
+                this.buttonsDown[event.button] = true;
+            }
+            this.buttonsHeld[event.button] = true;
         });
 
-        document.addEventListener("click", (event) => {
-            this._raycaster.setFromCamera(this.position,  this._sceneManager.Camera);
-            const intersects = this._raycaster.intersectObjects(this._sceneManager.Scene.children, true)
+        document.addEventListener("mouseup", (event: MouseEvent) => {
+            this.buttonsUp[event.button] = true;
+            this.buttonsHeld[event.button] = false;
+        });
 
-            if (intersects.length > 0) {
-                const clickedObject = intersects[0].object;
-                console.log('Clicked object:', clickedObject);
-            }
-        })
+        document.addEventListener("mousemove", (event: MouseEvent) => {
+            this.position.x = event.clientX;
+            this.position.y = event.clientY;
+        });
     }
 
     public static GetInstance()
@@ -37,5 +41,33 @@ export class Mouse
             this._instance = new Mouse();
         }
         return this._instance;
+    }
+
+    public GetButton(button: number): boolean {
+        return this.buttonsHeld[button] ?? false;
+    }
+
+    public GetButtonDown(button: number): boolean {
+        const isDown = this.buttonsDown[button] ?? false;
+        this.buttonsDown[button] = false;
+        return isDown;
+    }
+
+    public GetButtonUp(button: number): boolean {
+        const isUp = this.buttonsUp[button] ?? false;
+        this.buttonsUp[button] = false;
+        return isUp;
+    }
+
+    public GetPosition(): { x: number; y: number } {
+        return this.position;
+    }
+
+    public NormalizedPosition(): THREE.Vector2
+    {
+        const x = (this.position.x / window.innerWidth) * 2 - 1;
+        const y = -(this.position.y / window.innerHeight) * 2 + 1;
+    
+        return new THREE.Vector2(x,y);
     }
 }
