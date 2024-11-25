@@ -43,7 +43,7 @@ export class Mouse
         return this._instance;
     }
 
-    public GetButton(button: number): boolean {
+    public GetButtonHeld(button: number): boolean {
         return this.buttonsHeld[button] ?? false;
     }
 

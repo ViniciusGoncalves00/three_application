@@ -1,27 +1,45 @@
 {% extends "./base.html" %}
 {% load static %}
 {% block body %}
-    {% comment %} <div class="container mx-auto p-4">
-        <h1 class="text-4xl font-bold text-center text-blue-600">Welcome to My Django App</h1>
-        
-        <div x-data="{ count: 0 }" class="mt-8">
-            <p class="text-center text-xl">Current count: <span x-text="count"></span></p>
-            <div class="flex justify-center mt-4">
-                <button @click="count++" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                    Increment
-                </button>
-                <button @click="count--" class="ml-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
-                    Decrement
-                </button>
+
+<div class="fixed w-full h-screen flex justify-between">
+    <div x-data="{geometries_open : false, simulations_open : false, details_open : false}" class="flex items-start justify-start p-[16px] space-x-4">
+        <div x-data="$store.scene" class="w-[256px] max-h-[calc(100%-32px)] rounded-[8px] p-[8px] bg-white flex flex-col">
+            <button @click="geometries_open = !geometries_open" class="w-[100%] h-[32px] text-[20px] hover:text-black">GEOMETRIES</button>
+            <div x-show="geometries_open" class="w-[100%] h-full overflow-y-auto text-center text-[16px] flex flex-col">
+                <template x-for="name in children">
+                    <button @click="details_open = true" class="hover:text-black" x-text="name"></button>
+                </template>
+            </div>
+            <button @click="simulations_open = !simulations_open" class="w-[100%] h-[32px] text-[20px] hover:text-black">SIMULATIONS</button>
+            <div x-show="simulations_open" class="w-[100%] h-full overflow-y-auto text-center text-[16px]">
+                <template x-for="name in children">
+                    <li x-text="name"></li>
+                </template>
             </div>
         </div>
-    </div> {% endcomment %}
-    {% comment %} <div>
-        <div class="bg-white">BUTTON</div>
-        <div id="info" class="bg-transparent">
-            <button @click="$store.callbacks.move_cube('left')">MOVE LEFT</button>
-            <button @click="$store.callbacks.move_cube('right')">MOVE RIGHT</button>
+        <div x-show="details_open" @click.outside="details_open = false" class="w-[256px] h-[384px] bg-white"></div>
+    </div>
+    <div class="flex items-center justify-end p-[16px]">
+        <div class="flex flex-col items-end justify-center space-y-4">
+            <div class="h-4 pl-4 pr-4 space-x-4 flex justify-end">
+                <div class="h-full flex justify-end">orbit</div>
+                <div class="h-full flex justify-end">mouse 0</div>
+            </div>
+            <div class="h-4 pl-4 pr-4 space-x-4 flex">
+                <div class="h-full flex justify-end">pan</div>
+                <div class="h-full flex justify-end">mouse 1</div>
+            </div>
+            <div class="h-4 pl-4 pr-4 space-x-4 flex">
+                <div class="h-full flex justify-end">zoom</div>
+                <div class="h-full flex justify-end">mouse 2</div>
+            </div>
+            <div class="h-4 pl-4 pr-4 space-x-4 flex">
+                <div class="h-full flex justify-end">rotate</div>
+                <div class="h-full flex justify-end">mouse 3</div>
+            </div>
         </div>
-    </div> {% endcomment %}
+    </div>
+</div>
 
 {% endblock  %}

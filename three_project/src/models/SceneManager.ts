@@ -17,9 +17,9 @@ export class SceneManager
             0.1,
             1000
         );
-        this.Camera.position.x = -5;
+        this.Camera.position.x = 5;
         this.Camera.position.y = 5;
-        this.Camera.position.z = -5;
+        this.Camera.position.z = 5;
         this.Camera.lookAt(0,0,0)
 
         this.Renderer = new THREE.WebGLRenderer();

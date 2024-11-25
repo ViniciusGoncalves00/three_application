@@ -31,7 +31,7 @@ export class Keyboard {
         return this._instance;
     }
 
-    public GetKey(key: string): boolean {
+    public GetKeyHeld(key: string): boolean {
         return this.keysHeld[key] ?? false;
     }
 
